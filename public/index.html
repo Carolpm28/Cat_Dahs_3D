@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cat Dash 3D</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  
+  <!-- Tela inicial -->
+  <div id="start-screen">
+    <div class="menu-container">
+      <h1 class="title">CAT DASH 3D</h1>
+      <div class="menu-panel">
+        <button class="button" id="play-button">JOGAR</button>
+        <button class="button help-button" id="help-button">AJUDA</button>
+        <button class="button" id="settings-button">DEFINIÇÕES</button>
+      </div>
+      <div class="credits">© 2025 Cat Dash Studios</div>
+    </div>
+  </div>
+  
+  <!-- Tela de seleção de jogadores -->
+  <div id="menu-screen" class="hidden">
+    <div class="menu-container">
+      <h1 class="title">CAT DASH 3D</h1>
+      <div class="menu-panel">
+        <button class="button" id="one-player-button">1 JOGADOR</button>
+        <button class="button" id="two-players-button">2 JOGADORES</button>
+        <button class="button back-button" id="back-button">VOLTAR</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tela de seleção single player -->
+  <div id="singlePlayerPanel" class="hidden">
+    <div class="menu-container">
+      <h1 class="title">SELECIONE SEU GATO</h1>
+      <div class="menu-panel selection-panel">
+        <div class="character-selection-container">
+          <!-- Coluna esquerda - lista de gatos -->
+          <div class="characters-list">
+            <div class="character-option" data-character="rambim">
+              <div class="character-bubble">
+                <div class="character-image">
+                  <img src="assets/rambim.jpeg" alt="Rambim">
+                </div>
+              </div>
+              <div class="character-name">Rambim</div>
+              <div class="character-stats">
+                <div class="stat-row">
+                  <div class="stat-label">Velocidade:</div>
+                  <div class="stat-bar" style="--stat-value: 100%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Aceleração:</div>
+                  <div class="stat-bar" style="--stat-value: 80%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Manobra:</div>
+                  <div class="stat-bar" style="--stat-value: 60%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="character-option" data-character="faisca">
+              <div class="character-bubble">
+                <div class="character-image">
+                  <img src="assets/faísca.jpeg" alt="Faísca">
+                </div>
+              </div>
+              <div class="character-name">Faísca</div>
+              <div class="character-stats">
+                <div class="stat-row">
+                  <div class="stat-label">Velocidade:</div>
+                  <div class="stat-bar" style="--stat-value: 80%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Aceleração:</div>
+                  <div class="stat-bar" style="--stat-value: 100%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Manobra:</div>
+                  <div class="stat-bar" style="--stat-value: 80%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="character-option" data-character="blackie">
+              <div class="character-bubble">
+                <div class="character-image">
+                  <img src="assets/blackie.jpeg" alt="Blackie">
+                </div>
+              </div>
+              <div class="character-name">Blackie</div>
+              <div class="character-stats">
+                <div class="stat-row">
+                  <div class="stat-label">Velocidade:</div>
+                  <div class="stat-bar" style="--stat-value: 60%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Aceleração:</div>
+                  <div class="stat-bar" style="--stat-value: 100%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Manobra:</div>
+                  <div class="stat-bar" style="--stat-value: 100%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="character-option" data-character="mickey">
+              <div class="character-bubble">
+                <div class="character-image">
+                  <img src="assets/mickey.jpeg" alt="Mickey">
+                </div>
+              </div>
+              <div class="character-name">Mickey</div>
+              <div class="character-stats">
+                <div class="stat-row">
+                  <div class="stat-label">Velocidade:</div>
+                  <div class="stat-bar" style="--stat-value: 80%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Aceleração:</div>
+                  <div class="stat-bar" style="--stat-value: 60%"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Manobra:</div>
+                  <div class="stat-bar" style="--stat-value: 80%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Separador -->
+          <div class="divider"></div>
+
+          <!-- Coluna direita - gato em destaque -->
+          <div class="character-detail">
+            <div id="featured-character">
+              <div class="featured-name">Escolha um gato</div>
+              <div class="featured-image-container">
+                <img id="featured-image" src="" alt="Gato selecionado">
+              </div>
+              <div class="stats-container">
+                <div class="stat-row">
+                  <div class="stat-label">Velocidade:</div>
+                  <div class="stat-bar" id="speed-bar"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Aceleração:</div>
+                  <div class="stat-bar" id="accel-bar"></div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-label">Manobra:</div>
+                  <div class="stat-bar" id="handle-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="singlePlayerSelectButton" class="button gradient-purple">SELECIONAR</button>
+          <button id="backToPlayerSelectionButton" class="button gradient-coral">VOLTAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tela de seleção multiplayer -->
+  <div id="multiPlayerPanel" class="hidden">
+    <div class="menu-container">
+      <h1 class="title">SELECIONE OS GATOS</h1>
+      <div class="menu-panel selection-panel">
+        <div class="multiplayer-container">
+          <!-- Player 1 Selection -->
+          <div class="player-section">
+            <h3>Player 1</h3>
+            <div class="character-selection-container">
+              <!-- Coluna esquerda - lista de gatos para Player 1 -->
+              <div class="characters-list">
+                <div class="character-option" data-player="1" data-character="rambim">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/rambim.jpeg" alt="Rambim">
+                    </div>
+                  </div>
+                  <div class="character-name">Rambim</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="1" data-character="faisca">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/faísca.jpeg" alt="Faísca">
+                    </div>
+                  </div>
+                  <div class="character-name">Faísca</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="1" data-character="blackie">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/blackie.jpeg" alt="Blackie">
+                    </div>
+                  </div>
+                  <div class="character-name">Blackie</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="1" data-character="mickey">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/mickey.jpeg" alt="Mickey">
+                    </div>
+                  </div>
+                  <div class="character-name">Mickey</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="divider"></div>
+
+              <!-- Coluna direita - gato em destaque para Player 1 -->
+              <div class="character-detail">
+                <div id="featured-character-p1">
+                  <div class="featured-name">Escolha um gato</div>
+                  <div class="featured-image-container">
+                    <img id="featured-image-p1" src="" alt="Gato selecionado">
+                  </div>
+                  <div class="stats-container">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" id="speed-bar-p1"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" id="accel-bar-p1"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" id="handle-bar-p1"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Player 2 Selection -->
+          <div class="player-section">
+            <h3>Player 2</h3>
+            <div class="character-selection-container">
+              <!-- Coluna esquerda - lista de gatos para Player 2 -->
+              <div class="characters-list">
+                <div class="character-option" data-player="2" data-character="rambim">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/rambim.jpeg" alt="Rambim">
+                    </div>
+                  </div>
+                  <div class="character-name">Rambim</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="2" data-character="faisca">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/faísca.jpeg" alt="Faísca">
+                    </div>
+                  </div>
+                  <div class="character-name">Faísca</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="2" data-character="blackie">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/blackie.jpeg" alt="Blackie">
+                    </div>
+                  </div>
+                  <div class="character-name">Blackie</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 100%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="character-option" data-player="2" data-character="mickey">
+                  <div class="character-bubble">
+                    <div class="character-image">
+                      <img src="assets/mickey.jpeg" alt="Mickey">
+                    </div>
+                  </div>
+                  <div class="character-name">Mickey</div>
+                  <div class="character-stats">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" style="--stat-value: 60%"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" style="--stat-value: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Separador -->
+              <div class="divider"></div>
+
+              <!-- Coluna direita - gato em destaque para Player 2 -->
+              <div class="character-detail">
+                <div id="featured-character-p2">
+                  <div class="featured-name">Escolha um gato</div>
+                  <div class="featured-image-container">
+                    <img id="featured-image-p2" src="" alt="Gato selecionado">
+                  </div>
+                  <div class="stats-container">
+                    <div class="stat-row">
+                      <div class="stat-label">Velocidade:</div>
+                      <div class="stat-bar" id="speed-bar-p2"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Aceleração:</div>
+                      <div class="stat-bar" id="accel-bar-p2"></div>
+                    </div>
+                    <div class="stat-row">
+                      <div class="stat-label">Manobra:</div>
+                      <div class="stat-bar" id="handle-bar-p2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="multiPlayerSelectButton" class="button gradient-purple">SELECIONAR</button>
+          <button id="backFromMultiplayerButton" class="button gradient-coral">VOLTAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Container para o jogo -->
+  <div id="game-container" class="hidden">
+    <div class="loading" id="loading-text">Carregando...</div>
+  </div>
+
+  <!-- Tela de seleção de pista - APENAS 2 PISTAS -->
+  <div id="trackSelectionPanel" class="hidden">
+    <div class="menu-container">
+      <h1 class="title">SELECIONE A PISTA</h1>
+      <div class="menu-panel selection-panel">
+        <div class="track-selection-container">
+          <div class="track-grid">
+            <!-- 🏠 CIRCUITO DA CASA com emoji -->
+            <div class="track-option" data-track="pista1">
+              <div class="track-preview">
+                <div class="track-placeholder" style="display:flex;">
+                  <div class="track-icon">🏠</div>
+                </div>
+              </div>
+              <div class="track-info">
+                <div class="track-name">Circuito da Casa</div>
+                <div class="track-description">Uma corrida através dos móveis</div>
+                <div class="track-stats">
+                  <div class="track-stat">
+                    <span class="stat-icon">📏</span>
+                    <span>Comprimento: Médio</span>
+                  </div>
+                  <div class="track-stat">
+                    <span class="stat-icon">🏔️</span>
+                    <span>Dificuldade: Fácil</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 🌟 VOLTA DO JARDIM -->
+            <div class="track-option locked" data-track="pista2">
+              <div class="track-preview">
+                <img src="assets/pista2-preview.jpg" alt="Pista 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="track-placeholder" style="display:none;">
+                  <div class="track-icon">🌟</div>
+                </div>
+              </div>
+              <div class="track-info">
+                <div class="track-name">Volta do Jardim</div>
+                <div class="track-description">Corrida ao ar livre</div>
+                <div class="track-stats">
+                  <div class="track-stat">
+                    <span class="stat-icon">📏</span>
+                    <span>Comprimento: Longo</span>
+                  </div>
+                  <div class="track-stat">
+                    <span class="stat-icon">🏔️</span>
+                    <span>Dificuldade: Médio</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lap-selector" style="margin: 20px 0; text-align: center;">
+            <div class="track-name" style="margin-bottom: 10px;">Número de Voltas</div>
+            <div class="lap-buttons">
+                <button class="lap-button" data-laps="3">3 Voltas</button>
+                <button class="lap-button" data-laps="5">5 Voltas</button>
+                <button class="lap-button selected" data-laps="10">10 Voltas</button>
+                <button class="lap-button" data-laps="15">15 Voltas</button>
+            </div>
+        </div>
+
+        <div class="button-row">
+          <button id="trackSelectButton" class="button gradient-purple">COMEÇAR CORRIDA</button>
+          <button id="backToCharacterSelectionButton" class="button gradient-coral">VOLTAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js e Scripts Modulares -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script type="module" src="main.js"></script>
+  <script>
+    // Tentar tocar a música do menu assim que possível
+    window.addEventListener('DOMContentLoaded', function() {
+      let hasInteracted = false;
+
+      function tryPlayMenuMusic() {
+        if (hasInteracted) return; // Evitar múltiplas tentativas
+        if (window.gameManager && typeof window.gameManager.showMenuMusic === 'function') {
+          window.gameManager.showMenuMusic();
+          hasInteracted = true;
+          // Remover listeners após sucesso
+          document.removeEventListener('click', tryPlayMenuMusic);
+          document.removeEventListener('keydown', tryPlayMenuMusic);
+          document.removeEventListener('touchstart', tryPlayMenuMusic);
+        }
+      }
+
+      // Tentar logo ao carregar
+      setTimeout(() => {
+        if (!hasInteracted) tryPlayMenuMusic();
+      }, 1000);
+
+      // Garantir que toca após a primeira interação do utilizador
+      document.addEventListener('click', tryPlayMenuMusic);
+      document.addEventListener('keydown', tryPlayMenuMusic);
+      document.addEventListener('touchstart', tryPlayMenuMusic);
+
+      // Tentar periodicamente nos primeiros segundos
+      let attempts = 0;
+      const interval = setInterval(() => {
+        if (hasInteracted || attempts >= 5) {
+          clearInterval(interval);
+          return;
+        }
+        tryPlayMenuMusic();
+        attempts++;
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
