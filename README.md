@@ -62,7 +62,7 @@ Cat Dash 3D é um jogo de corrida desenvolvido com Three.js que oferece uma expe
 ## 📁 Estrutura do Projeto
 
 ```
-Cat_Dahs_3D/
+Cat_Dash_3D/
 ├── public/
 │   ├── assets/              # Recursos do jogo (imagens, sons, texturas)
 │   ├── js/
